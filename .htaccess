@@ -1,0 +1,4 @@
+<IfModule mod_charset.c>
+  CharsetDisable On
+</IfModule>
+AddCharset UTF-8 .html

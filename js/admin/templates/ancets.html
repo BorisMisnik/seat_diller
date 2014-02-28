@@ -1,0 +1,95 @@
+<div class="row">
+	<!-- date picker -->
+	<div class="col-md-4">
+		<h4>От: </h4>
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" max="'2015-06-22'" datepicker-options="dateOptions" close-text="Close" ng-change="selectDate();"/>
+			<span class="input-group-btn">
+				<button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			</span>
+		</p>
+	</div>
+	<div class="col-md-4">
+		<h4>До: </h4>
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt2" is-open="opened2" max="'2015-06-22'" min="minDate" datepicker-options="dateOptions" close-text="Close" />
+			<span class="input-group-btn">
+				<button class="btn btn-default" ng-click="open_second($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			</span>
+		</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<h4>Фильтр по поделям :</h4>
+		<select ng-model="model" ng-options="label as label for label in models" ng-change="chooseModel();"></select>
+	</div>
+	<div class="col-md-4">
+		<h4>Фильтр по модификациям :</h4>
+		<select ng-model="type_model" ng-options="label as label for label in modification"></select>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<h4>ДЦ</h4>
+		<select ng-model="diller" ng-options="option as option for option in dillers" ng-change="enableFilter();"></select>
+	</div>
+	<div class="col-md-4">
+		 <p class="input-group">
+			<label>
+			  <input type="checkbox" value="Да" ng-model="processing" ng-change="enableFilter();"> Cогласие на обработку персональных данных 
+			</label>
+		</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<h4>Кол-во анкет на одной странице</h4>
+		<p class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+			<input type="text" class="form-control" placeholder="Кол-во анкет на одной странице" ng-model="ancetsShow">
+		</p>
+	</div>
+</div>
+
+<pagination total-items="totalItems" page="currentPage" items-per-page="ancetsShow"></pagination>
+<input type="hidden" ng-model="page" value="{{currentPage}}" ng-change="changePage();"/>
+
+<table class="table table-hover table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Диллер центр</th>
+			<th>Город</th>
+			<th>Менеджер</th>
+			<th>Дата заполнения</th>
+			<th>Скан анкеты</th>
+			<th>Удалить</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="ancet in ancets
+		| filter : diller | processingFilter : processing
+		| startFrom:(currentPage*ancetsShow) - ancetsShow 
+		| limitTo:ancetsShow" name="{{ancets.length}}">
+			<td>{{$index}}</td>
+			<td>{{ancet.diller}}</td>
+			<td>{{ancet.city}}</td>
+			<td>{{ancet.manadger}}</td>
+			<td>
+				{{ancet.write_date}}/{{ancet.write_month}}/{{ancet.write_year}}
+			</td>
+			<td>
+				<a href='{{image}}' class='img-thumbnail image' ng-repeat="image in ancet.image"><img ng-src='{{image}}'></a>
+			</td>
+			<td>
+				<a href="#" class="btn btn-danger target='_blank'">Удалить</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<pagination total-items="totalItems" page="currentPage" items-per-page="ancetsShow"></pagination>
